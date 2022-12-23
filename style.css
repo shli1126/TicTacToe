@@ -1,0 +1,19 @@
+.cell{
+    width: 75px;
+    height: 75px;
+    border: 10px groove;
+    background-color:aquamarine;
+    font-size: 80px;
+    font-weight:bold;
+    cursor: pointer;
+}
+#gamebody{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+#cells{
+    display:grid;
+    grid-template-columns: auto auto auto;
+    width: 250px;
+    margin: auto;
+}
