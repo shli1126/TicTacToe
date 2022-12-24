@@ -16,7 +16,8 @@ const winCases = [
 let options = ["", "", "", "", "", "", "", "", ""];
 let currPlayer = "X";
 let running = false;
-
+let idOptions = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
+const delay = ms => new Promise(res => setTimeout(res, ms));
 startGame();
 
 function startGame() {
@@ -46,7 +47,36 @@ function clickCell() {
         return;
     }
     updateCell(this, idx);
+    
     checkWin();
+    setTimeout(() => { updateAfterClick() }, 1000);
+    checkWin();
+}
+
+function updateAfterClick() {
+    let remain = [];
+    for (let i = 0; i < options.length; i++) {
+        if (options[i] != "") {
+            remain.push(i);
+        }
+    }
+    const random = Math.floor(Math.random() * remain.length);
+    let id = idOptions[random];
+    let x = document.getElementById(id);
+    if (currPlayer == "O") {
+        options[random] = "X";
+        x.textContent = "X";
+    }
+    else {
+        options[random] = "O";
+        x.textContent = "O";
+    }
+}
+
+
+function updateCell(cell, index) {
+    options[index] = currPlayer;
+    cell.textContent = currPlayer;
 }
 
 function switchPlay() {
@@ -58,11 +88,6 @@ function switchPlay() {
         currPlayer = "X";
         statusText.textContent = `${currPlayer}'s turn`;
     }
-}
-
-function updateCell(cell, index) {
-    options[index] = currPlayer;
-    cell.textContent = currPlayer;
 }
 
 function checkWin() {
@@ -92,6 +117,6 @@ function checkWin() {
     }
     //if no one win yet and there is still space, switch and continue;
     else {
-        switchPlay();
+        //switchPlay();
     }
 }
