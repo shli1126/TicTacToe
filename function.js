@@ -49,27 +49,55 @@ function clickCell() {
     updateCell(this, idx);
     
     checkWin();
-    setTimeout(() => { updateAfterClick() }, 1000);
-    checkWin();
+    if (running) {
+        // 1
+        console.log("first");
+        console.log(options);
+        let up = updateAfterClick();
+        if (currPlayer == "X") {
+            setTimeout(() => { up.textContent = "O"}, 1000);
+        }else {
+            setTimeout(() => { up.textContent = "X"}, 1000);
+        }
+    }
+    else {
+        checkWin();
+    }
+    // 3
+    console.log("third");
+    console.log(options);
+    console.log('\n');
+    console.log('\n');
 }
 
 function updateAfterClick() {
+    // 2
+    console.log("second");
+    console.log(options);
     let remain = [];
     for (let i = 0; i < options.length; i++) {
-        if (options[i] != "") {
+        if (options[i] == "") {
             remain.push(i);
         }
     }
-    const random = Math.floor(Math.random() * remain.length);
+    console.log(remain);
+    let randomIdx = Math.floor(Math.random() * remain.length);
+    let random = remain[randomIdx];
+    console.log(random);
     let id = idOptions[random];
     let x = document.getElementById(id);
     if (currPlayer == "O") {
-        options[random] = "X";
-        x.textContent = "X";
+        options[random] = "O";
+        //console.log(options[random]);
+        //x.textContent = "O";
+        switchPlay();
+        return x;
     }
     else {
-        options[random] = "O";
-        x.textContent = "O";
+        options[random] = "X";
+        //x.textContent = "X";
+        switchPlay();
+        return x;
     }
 }
 
@@ -92,12 +120,14 @@ function switchPlay() {
 
 function checkWin() {
     let winYet = false;
+    let winParty;
     for (let i = 0; i < winCases.length; i++) {
         let ca = winCases[i];
         let cellOne = options[ca[0]];
         let cellTwo = options[ca[1]];
         let cellThree = options[ca[2]];
         if (cellOne == cellTwo && cellOne == cellThree && cellOne != "") {
+            winParty = cellOne;
             winYet = true;
             break;
         }
@@ -107,7 +137,7 @@ function checkWin() {
     } 
     // if there is three link together, just announce the win and end the game
     if (winYet == true) {
-        statusText.textContent = `${currPlayer} won`;
+        statusText.textContent = `${winParty} won`;
         running = false;
     }
     //if no one win, announce draw and end game
@@ -117,6 +147,6 @@ function checkWin() {
     }
     //if no one win yet and there is still space, switch and continue;
     else {
-        //switchPlay();
+        switchPlay();
     }
 }
