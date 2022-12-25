@@ -1,2 +1,2 @@
 # TicTacToe
-<img align="left" alt="tictactoe" src="image/preview" />
+<img align="left" alt="tictactoe" src="image/preview.png" />
