@@ -16,6 +16,7 @@ const winCases = [
 let options = ["", "", "", "", "", "", "", "", ""];
 let currPlayer = "X";
 let running = false;
+let firstToggle = true;
 let idOptions = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
 const delay = ms => new Promise(res => setTimeout(res, ms));
 startGame();
@@ -26,16 +27,29 @@ function startGame() {
     cells.forEach(cell => cell.addEventListener("click", clickCell));
     restart.addEventListener("click", restartGame);
     switchplay.addEventListener("click", switchPlay);
-    statusText.textContent = `${currPlayer}'s turn`;
+    switchplay.addEventListener("click", xGoFirst);
+    statusText.textContent = `Player: ${currPlayer}`;
+    
     running = true;
 }
+
+function xGoFirst() {
+    if (currPlayer == "O" && firstToggle == true) {
+        switchPlay();
+         let up = updateAfterClick();
+         setTimeout(() => { up.textContent = "X"}, 1000);
+    }
+    firstToggle = false;
+}
+
 
 function restartGame() {
     // reset all the instance variables
     currPlayer = "X";
     options = ["", "", "", "", "", "", "", "", ""];
-    statusText.textContent = `${currPlayer}'s turn`;
+    statusText.textContent = `Player: ${currPlayer}`;
     cells.forEach(cell => cell.textContent="");
+    firstToggle = true;
     running = true;
 }
 
@@ -92,6 +106,12 @@ function checkWinNoSwitch() {
     if (winYet == true) {
         setTimeout(() => { statusText.textContent = `${winParty} won` }, 1000);
         running = false;
+        firstToggle = true;
+    }
+    else if (!options.includes("")) {
+        setTimeout(() => { statusText.textContent = `Draw`; }, 1000);
+        running = false;
+        firstToggle = true;
     }
 }
 
@@ -135,11 +155,11 @@ function updateCell(cell, index) {
 function switchPlay() {
     if (currPlayer == "X") {
         currPlayer = "O";
-        statusText.textContent = `${currPlayer}'s turn`;
+        statusText.textContent = `Player: ${currPlayer}`;
     }
     else {
         currPlayer = "X";
-        statusText.textContent = `${currPlayer}'s turn`;
+        statusText.textContent = `Player: ${currPlayer}`;
     }
 }
 
@@ -164,11 +184,13 @@ function checkWin() {
     if (winYet == true) {
         statusText.textContent = `${winParty} won`;
         running = false;
+        firstToggle = true;
     }
     //if no one win, announce draw and end game
     else if (!options.includes("")) {
         statusText.textContent = `Draw`;
         running = false;
+        firstToggle = true;
     }
     //if no one win yet and there is still space, switch and continue;
     else {
