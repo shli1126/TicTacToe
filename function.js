@@ -59,6 +59,7 @@ function clickCell() {
         }else {
             setTimeout(() => { up.textContent = "X"}, 1000);
         }
+        checkWinNoSwitch();
     }
     else {
         checkWin();
@@ -68,6 +69,30 @@ function clickCell() {
     console.log(options);
     console.log('\n');
     console.log('\n');
+}
+
+function checkWinNoSwitch() {
+    let winYet = false;
+    let winParty;
+    for (let i = 0; i < winCases.length; i++) {
+        let ca = winCases[i];
+        let cellOne = options[ca[0]];
+        let cellTwo = options[ca[1]];
+        let cellThree = options[ca[2]];
+        if (cellOne == cellTwo && cellOne == cellThree && cellOne != "") {
+            winParty = cellOne;
+            winYet = true;
+            break;
+        }
+        else {
+            continue;
+        }
+    } 
+    // if there is three link together, just announce the win and end the game
+    if (winYet == true) {
+        setTimeout(() => { statusText.textContent = `${winParty} won` }, 1000);
+        running = false;
+    }
 }
 
 function updateAfterClick() {
