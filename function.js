@@ -2,6 +2,8 @@ const cells = document.querySelectorAll(".cell");
 const statusText = document.querySelector("#status");
 const restart = document.querySelector("#restart");
 const switchplay = document.querySelector("#switch");
+let selected = document.querySelector("#difficulty");
+
 const winCases = [
     [0, 1, 2],
     [3, 4, 5],
@@ -12,6 +14,10 @@ const winCases = [
     [0, 4, 8],
     [2, 4, 6]
 
+];
+const moveCase = [
+    [0, 4, 8], [4, 8, 0], [2, 4, 6], [4, 6, 2], [1, 4, 7], [4, 7, 1], [3, 4, 5], [4, 5, 3],
+    [0, 1, 2], [1, 2, 0], [0, 3, 6], [3, 6, 0], [6, 7, 8], [7, 8, 6], [8, 5, 2], [5, 2, 8]
 ];
 let options = ["", "", "", "", "", "", "", "", ""];
 let currPlayer = "X";
@@ -116,36 +122,78 @@ function checkWinNoSwitch() {
 }
 
 function updateAfterClick() {
-    // 2
-    console.log("second");
-    console.log(options);
+    let level = selected.value;
     let remain = [];
+    let idx;
+    let id;
     for (let i = 0; i < options.length; i++) {
         if (options[i] == "") {
             remain.push(i);
         }
     }
-    console.log(remain);
-    let randomIdx = Math.floor(Math.random() * remain.length);
-    let random = remain[randomIdx];
-    console.log(random);
-    let id = idOptions[random];
-    let x = document.getElementById(id);
+    if (level == "Easy") {
+        let randomIdx = Math.floor(Math.random() * remain.length);
+        idx = remain[randomIdx];
+        id = idOptions[idx];
+    }
+    else {
+   
+        let op;
+        if (currPlayer == "X") {
+            op = "O";
+        }
+        else {
+            op="X";
+        }
+        var find;
+        for (let i = 0; i < moveCase.length; i++) {
+            var ca = moveCase[i];
+            let cellOne = options[ca[0]];
+            let cellTwo = options[ca[1]];
+            let cellThree = options[ca[2]];
+            if (cellOne == op && cellTwo == op &&  cellThree == "") {
+                find = true;
+                break;
+            }
+            else {
+                continue;
+            }
+        } 
+        if (find == true) {
+            idx = ca[2];
+            id = idOptions[idx];
+        }
+        else {
+            let randomIdx = Math.floor(Math.random() * remain.length);
+            idx = remain[randomIdx];
+            id = idOptions[idx];
+        }
+    }
+    var x = document.getElementById(id);
     if (currPlayer == "O") {
-        options[random] = "O";
-        //console.log(options[random]);
-        //x.textContent = "O";
+        options[idx] = "O";
         switchPlay();
         return x;
     }
     else {
-        options[random] = "X";
-        //x.textContent = "X";
+        options[idx] = "X";
         switchPlay();
         return x;
     }
 }
 
+function hardPick(remain) {
+    let op; 
+    if (currPlayer == "X") {
+        op = "O";
+    }
+    else {
+        op = "X";
+    }
+    if (option[0] == op && option[4] == op && option[8] == "") {
+
+    }
+}
 
 function updateCell(cell, index) {
     options[index] = currPlayer;
